@@ -1,3 +1,33 @@
+<?php
+
+use App\Models\User;
+use Livewire\Attributes\Layout;
+use Livewire\Volt\COmponent;
+
+new #[Layout('components.layouts.guest')] class extends Component
+{
+    public $name, $email, $password, $password_confirmation, $message;
+
+    public function register()
+    {
+        $this->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => bcrypt($this->password),
+        ]);
+
+        auth()->login($user);
+        return redirect('/');
+    }
+}
+?>
+
 <div class="container mx-auto p-4 flex justify-center items-center h-screen">
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center">
         <form class="w-full">

@@ -1,3 +1,22 @@
+<?php
+use Livewire\Volt\Component;
+
+new class extends Component
+{
+    public function mount()
+    {
+        if (!auth()->check()) {
+            return redirect()->to('/login');
+        }
+    }
+    public function logout()
+    {
+        auth()->logout();
+        return redirect('/login');
+    }
+}
+?>
+
 <div>
     Hello
     <button wire:click.prevent="logout"

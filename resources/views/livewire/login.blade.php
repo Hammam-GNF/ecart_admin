@@ -1,3 +1,23 @@
+<?php
+
+use function Livewire\Volt\{state};
+
+state(['email' => '', 'password' => '']);
+
+$login = function () {
+    $this->validate(
+        ['email' => 'required|email', 'password' => 'required']
+    );
+
+    if (auth()->attempt(['email' => $this->email, 'password' => $this->password])) {
+        return redirect('/');
+    }
+    
+    $this->addError('email', 'The provided credentials do not match our records.');
+    return redirect()->back();
+}
+?>
+
 <div class="container mx-auto p-4 flex justify-center items-center h-screen">
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center">
         <form class="w-full">
