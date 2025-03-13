@@ -47,6 +47,13 @@ class User extends Authenticatable
         ];
     }
 
+
+    public $roles = [
+        'admin',
+        'customer',
+        'vendor',
+    ];
+
     /**
      * Get the user's initials
      */
