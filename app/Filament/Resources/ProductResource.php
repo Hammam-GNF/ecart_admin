@@ -13,6 +13,8 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\MarkdownEditor;
@@ -30,16 +32,14 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()->live(
-                    debounce: 500
-                )
-                ->afterStateUpdated(function ( $state, $set ) {
+                TextInput::make('name')->required()->live(debounce: 500)->afterStateUpdated(function ( $state, $set ) {
                     $set('slug', Str::slug($state));
                 }),
-                TextInput::make('slug')->required()->readOnly()->unique(ignoreRecord: true),
+                TextInput::make('slug')->required()->unique(ignoreRecord: true)->readOnly(),
                 MarkdownEditor::make('description')->nullable(),
                 TextInput::make('price')->required()->numeric(),
                 TextInput::make('stock')->required()->integer(),
+                FileUpload::make('image')->nullable(),
                 Hidden::make('user_id')->default(auth()->id()),
                 Select::make('category_id')->label('Category')->relationship('category', 'name')->required()->searchable(),
                 CheckboxList::make('tags')->label('Tags')->relationship(titleAttribute: 'name')->required(),
@@ -51,9 +51,10 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->searchable(),
-                TextColumn::make('slug')->searchable(),
+                ImageColumn::make('image'),
                 TextColumn::make('price')->searchable()->money('usd'),
                 TextColumn::make('category.name')->searchable(),
+                TextColumn::make('user.name')->searchable(),
                 TextColumn::make('tags.name')->searchable(),
             ])
             ->filters([

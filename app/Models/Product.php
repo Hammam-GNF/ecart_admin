@@ -10,6 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $appends = ['image_url'];
 
     public function user()
     {
@@ -24,5 +25,10 @@ class Product extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return url('storage/' . $this->image);
     }
 }
