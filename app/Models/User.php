@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'image',
     ];
+
+    protected $appends = ['joined_ago'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,6 +52,13 @@ class User extends Authenticatable
         ];
     }
 
+
+    public $roles = [
+        'admin',
+        'customer',
+        'vendor',
+    ];
+
     /**
      * Get the user's initials
      */
@@ -56,5 +68,15 @@ class User extends Authenticatable
             ->explode(' ')
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function getJoinedAgoAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }
