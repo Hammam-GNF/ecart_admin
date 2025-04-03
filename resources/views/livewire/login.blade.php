@@ -13,7 +13,7 @@ $login = function () {
         return redirect('/');
     }
     
-    $this->addError('email', 'The provided credentials do not match our records.');
+    $this->addError('password', 'The provided credentials do not match our records.');
     return redirect()->back();
 }
 ?>
