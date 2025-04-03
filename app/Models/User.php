@@ -27,6 +27,8 @@ class User extends Authenticatable
         'image',
     ];
 
+    protected $appends = ['joined_ago'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -71,5 +73,10 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function getJoinedAgoAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }
