@@ -26,6 +26,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tags', [TagController::class, 'getAllTags']);
     Route::get('/tag/{id}', [TagController::class, 'tagDetails']);
 
+    // Product
+    Route::post('/add-product', [ProductController::class, 'addProduct']);
+    Route::post('/edit-product/{id}', [ProductController::class, 'editProduct']);
 });
 
 
