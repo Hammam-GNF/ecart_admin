@@ -16,19 +16,4 @@ class ProductController extends Controller
             "product" => $products
         ]);
     }
-
-    public function createProduct(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'requried',
-        ]);
-
-        $product = $request->user()->products()->create($request->all());
-
-        return response()->json([
-            "product" => $product
-        ]);
-    }
 }
